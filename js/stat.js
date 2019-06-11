@@ -55,7 +55,7 @@ window.renderStatistics = function (ctx, players, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < players.length; i++) {
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = '#000';
     ctx.fillText(players[i], CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i), CLOUD_HEIGHT - GAP);
     ctx.fillText(Math.round(times[i]), CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i), CLOUD_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime) - GAP * 3);
     ctx.fillStyle = barColor(players[i]);
