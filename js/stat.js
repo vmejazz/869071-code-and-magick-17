@@ -17,28 +17,23 @@ var renderCloud = function (ctx, x, y, color) {
 };
 
 var getMaxElement = function (arr) {
-  var maxElement = 5000;
-  if (arr.length > 0) {
-    maxElement = arr[0];
+  var maxElement = arr[0];
 
-    for (var i = 0; i < arr.length; i++) {
-      if (arr[i] > maxElement) {
-        maxElement = arr[i];
-      }
+  for (var i = 0; i < arr.length; i++) {
+    if (arr[i] > maxElement) {
+      maxElement = arr[i];
     }
-    return maxElement;
   }
 
   return maxElement;
 };
 
-var barColor = function (player) {
-  var color = 'rgba(0,0,255,' + (0.1 + (Math.round(Math.random() * 100) / 100)) + ')';
-  if (player === 'Вы') {
-    color = 'rgba(255, 0, 0, 1)';
-    return color;
-  }
+var getRandom = function () {
+  return Math.random();
+};
 
+var getBarColor = function (player) {
+  var color = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + Math.round(getRandom() * 100) + '%, 50%)';
   return color;
 };
 
@@ -55,10 +50,13 @@ window.renderStatistics = function (ctx, players, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < players.length; i++) {
+    var barHeightPlayer = (maxTime === undefined) ? BAR_HEIGHT : (BAR_HEIGHT * times[i]) / maxTime;
+    var ResultPositionX = CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i);
+
     ctx.fillStyle = '#000';
-    ctx.fillText(players[i], CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i), CLOUD_HEIGHT - GAP);
-    ctx.fillText(Math.round(times[i]), CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i), CLOUD_HEIGHT - ((BAR_HEIGHT * times[i]) / maxTime) - GAP * 3);
-    ctx.fillStyle = barColor(players[i]);
-    ctx.fillRect(CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i), CLOUD_HEIGHT - (GAP * 3), BAR_WIDTH, -((BAR_HEIGHT * times[i]) / maxTime) + GAP);
+    ctx.fillText(players[i], ResultPositionX, CLOUD_HEIGHT - GAP);
+    ctx.fillText(Math.round(times[i]), ResultPositionX, CLOUD_HEIGHT - (barHeightPlayer) - GAP * 3);
+    ctx.fillStyle = getBarColor(players[i]);
+    ctx.fillRect(ResultPositionX, CLOUD_HEIGHT - (GAP * 3), BAR_WIDTH, -(barHeightPlayer) + GAP);
   }
 };
