@@ -28,12 +28,12 @@ var getMaxElement = function (arr) {
   return maxElement;
 };
 
-var getRandom = function () {
-  return Math.random();
+var getRandomSaturation = function () {
+  return Math.round(Math.random() * 100);
 };
 
 var getBarColor = function (player) {
-  var color = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + Math.round(getRandom() * 100) + '%, 50%)';
+  var color = (player === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + getRandomSaturation() + '%, 50%)';
   return color;
 };
 
@@ -51,12 +51,12 @@ window.renderStatistics = function (ctx, players, times) {
 
   for (var i = 0; i < players.length; i++) {
     var barHeightPlayer = (maxTime === undefined) ? BAR_HEIGHT : (BAR_HEIGHT * times[i]) / maxTime;
-    var ResultPositionX = CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i);
+    var resultPositionX = CLOUD_X + (GAP * 2) + ((BAR_GAP + BAR_WIDTH) * i);
 
     ctx.fillStyle = '#000';
-    ctx.fillText(players[i], ResultPositionX, CLOUD_HEIGHT - GAP);
-    ctx.fillText(Math.round(times[i]), ResultPositionX, CLOUD_HEIGHT - (barHeightPlayer) - GAP * 3);
+    ctx.fillText(players[i], resultPositionX, CLOUD_HEIGHT - GAP);
+    ctx.fillText(Math.round(times[i]), resultPositionX, CLOUD_HEIGHT - (barHeightPlayer) - GAP * 3);
     ctx.fillStyle = getBarColor(players[i]);
-    ctx.fillRect(ResultPositionX, CLOUD_HEIGHT - (GAP * 3), BAR_WIDTH, -(barHeightPlayer) + GAP);
+    ctx.fillRect(resultPositionX, CLOUD_HEIGHT - (GAP * 3), BAR_WIDTH, -(barHeightPlayer) + GAP);
   }
 };
