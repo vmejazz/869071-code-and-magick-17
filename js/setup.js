@@ -10,7 +10,7 @@ var similarWizardTemplate = document.querySelector('#similar-wizard-template')
     .content
     .querySelector('.setup-similar-item');
 
-var firstNames = [
+var FIRST_NAMES = [
   'Иван',
   'Хуан Себастьян',
   'Мария',
@@ -21,7 +21,7 @@ var firstNames = [
   'Вашингтон'
 ];
 
-var secondNames = [
+var SECOND_NAMES = [
   'да Марья',
   'Верон',
   'Мирабелла',
@@ -32,7 +32,7 @@ var secondNames = [
   'Ирвинг'
 ];
 
-var coatColors = [
+var COAT_COLORS = [
   'rgb(101, 137, 164)',
   'rgb(241, 43, 107)',
   'rgb(146, 100, 161)',
@@ -41,7 +41,7 @@ var coatColors = [
   'rgb(0, 0, 0)'
 ];
 
-var eyesColors = [
+var EYES_COLORS = [
   'black',
   'red',
   'blue',
@@ -49,26 +49,28 @@ var eyesColors = [
   'green'
 ];
 
+var WIZARD_COUNT = 4;
+
 var getRandomItem = function (array) {
   return Math.floor(Math.random() * array.length);
 };
 
-var getWizardProperties = function (wizardCount) {
-  var arrayWizard = [];
+var getWizardProperties = function () {
+  var arrayWizards = [];
   var i = 1;
-  while (i <= wizardCount) {
+  while (i <= WIZARD_COUNT) {
     var wizardPropetry = {
-      name: firstNames[getRandomItem(firstNames)] + ' ' + secondNames[getRandomItem(secondNames)],
-      coatColor: coatColors[getRandomItem(coatColors)],
-      eyesColor: eyesColors[getRandomItem(eyesColors)]
+      name: FIRST_NAMES[getRandomItem(FIRST_NAMES)] + ' ' + SECOND_NAMES[getRandomItem(SECOND_NAMES)],
+      coatColor: COAT_COLORS[getRandomItem(COAT_COLORS)],
+      eyesColor: EYES_COLORS[getRandomItem(EYES_COLORS)]
     };
-    arrayWizard.push(wizardPropetry);
+    arrayWizards.push(wizardPropetry);
     i++;
   }
-  return arrayWizard;
+  return arrayWizards;
 };
 
-var wizards = getWizardProperties(4);
+var wizards = getWizardProperties();
 
 var renderWizard = function (wizard) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
