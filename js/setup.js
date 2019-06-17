@@ -2,7 +2,7 @@
 'use strict';
 
 var userDialog = document.querySelector('.setup');
-userDialog.classList.remove('hidden');
+// userDialog.classList.remove('hidden');
 
 var similarListElement = userDialog.querySelector('.setup-similar-list');
 
@@ -89,3 +89,64 @@ for (var i = 0; i < wizards.length; i++) {
 similarListElement.appendChild(fragment);
 
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+// Домашка #4 ----------------------------------------------
+
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
+
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
+var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setup.querySelector('.setup-close');
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  if (document.activeElement !== setup.querySelector('.setup-user-name')) {
+    setup.classList.add('hidden');
+    document.removeEventListener('keydown', onPopupEscPress);
+  }
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    closePopup();
+  }
+});
+
+// setup.focus(
+//     setupClose.removeEventListener('keydown', function () {
+
+//     })
+// );
