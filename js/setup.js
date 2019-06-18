@@ -90,7 +90,7 @@ similarListElement.appendChild(fragment);
 
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
 
-// Домашка #4 ----------------------------------------------
+// module4-task1 ----------------------------------------------
 
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
