@@ -2,7 +2,6 @@
 'use strict';
 
 var userDialog = document.querySelector('.setup');
-// userDialog.classList.remove('hidden');
 
 var similarListElement = userDialog.querySelector('.setup-similar-list');
 
@@ -245,7 +244,7 @@ var draggedSetupWindow = function () {
 
 
       if (dragged) {
-        var onClickPreventDefault = function () {
+        var onClickPreventDefault = function (evt) {
           evt.preventDefault();
           dialogHandler.removeEventListener('click', onClickPreventDefault);
         };
@@ -263,7 +262,6 @@ draggedSetupWindow();
 
 //  ------------------------------------------------- перетаскиваем вещи из магазина в сумку
 
-// var shopElements = userDialog.querySelector('.setup-artifacts-shop');
 var playerBug = userDialog.querySelector('.setup-artifacts');
 
 var draggedWindow = function (draggedItem) {
@@ -304,14 +302,6 @@ var draggedWindow = function (draggedItem) {
 
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
-
-
-      // if (draggedItem.getBoundingClientRect().left >= playerBug.getBoundingClientRect().left && draggedItem.getBoundingClientRect().left + draggedItem.offsetWidth <= playerBug.getBoundingClientRect().left + playerBug.offsetWidth && draggedItem.getBoundingClientRect().top >= playerBug.getBoundingClientRect().top && draggedItem.getBoundingClientRect().top + draggedItem.offsetHeight <= playerBug.getBoundingClientRect().top + playerBug.offsetHeight) {
-      //   // console.log('УРА ты попал в сумку');
-      // } else {
-      //   draggedItem.style.top = startCoordsReset.x + 'px';
-      //   draggedItem.style.left = startCoordsReset.y + 'px';
-      // }
 
       var getPositionItemInBug = function () {
         var positionElemntX = draggedItem.getBoundingClientRect().left;
