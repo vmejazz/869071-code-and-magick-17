@@ -123,8 +123,8 @@ var closePopup = function () {
     setup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   }
-  userDialog.style.top = startCoordsReset.x + 'px';
-  userDialog.style.left = startCoordsReset.y + 'px';
+  userDialog.style.top = startCoordsUserDialog.x + 'px';
+  userDialog.style.left = startCoordsUserDialog.y + 'px';
 };
 
 setupOpen.addEventListener('click', function () {
@@ -188,11 +188,11 @@ fireballPlayerSetup.addEventListener('click', function () {
 
 // module5-task1 ----------------------------------------------
 
-var resetX;
-var resetY;
-var startCoordsReset = {
-  x: resetX,
-  y: resetY
+var userDialogResetX;
+var userDialogResetY;
+var startCoordsUserDialog = {
+  x: userDialogResetX,
+  y: userDialogResetY
 };
 
 var draggedSetupWindow = function () {
@@ -207,12 +207,12 @@ var draggedSetupWindow = function () {
       y: evt.clientY
     };
 
-    resetX = userDialog.offsetTop;
-    resetY = userDialog.offsetLeft;
+    userDialogResetX = userDialog.offsetTop;
+    userDialogResetY = userDialog.offsetLeft;
 
-    startCoordsReset = {
-      x: resetX,
-      y: resetY
+    startCoordsUserDialog = {
+      x: userDialogResetX,
+      y: userDialogResetY
     };
 
 
@@ -242,8 +242,6 @@ var draggedSetupWindow = function () {
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
-      // userDialog.style.top = startCoordsReset.x + 'px';
-      // userDialog.style.left = startCoordsReset.y + 'px';
 
 
       if (dragged) {
@@ -265,9 +263,8 @@ draggedSetupWindow();
 
 //  ------------------------------------------------- перетаскиваем вещи из магазина в сумку
 
-var shopElements = userDialog.querySelector('.setup-artifacts-shop');
+// var shopElements = userDialog.querySelector('.setup-artifacts-shop');
 var playerBug = userDialog.querySelector('.setup-artifacts');
-console.log(shopElements);
 
 var draggedWindow = function (draggedItem) {
   draggedItem.addEventListener('mousedown', function (evt) {
@@ -278,20 +275,17 @@ var draggedWindow = function (draggedItem) {
       y: evt.clientY
     };
 
-    resetX = draggedItem.offsetTop;
-    resetY = draggedItem.offsetLeft;
+    var resetX = draggedItem.offsetTop;
+    var resetY = draggedItem.offsetLeft;
 
-    startCoordsReset = {
+    var startCoordsReset = {
       x: resetX,
       y: resetY
     };
 
-    var dragged = false;
-
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
       draggedItem.style.position = 'absolute';
-      dragged = true;
 
       var shift = {
         x: startCoords.x - moveEvt.clientX,
@@ -303,8 +297,6 @@ var draggedWindow = function (draggedItem) {
         y: moveEvt.clientY
       };
 
-      console.log(draggedItem.style.position);
-
       draggedItem.style.top = (draggedItem.offsetTop - shift.y) + 'px';
       draggedItem.style.left = (draggedItem.offsetLeft - shift.x) + 'px';
 
@@ -313,15 +305,23 @@ var draggedWindow = function (draggedItem) {
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      console.log(draggedItem.offsetLeft);
-      console.log(playerBug.offsetLeft);
-
       if (draggedItem.offsetLeft >= playerBug.offsetLeft && draggedItem.offsetLeft <= playerBug.offsetLeft + playerBug.offsetWidth) {
-        console.log('УРА ты попал в сумку');
+        if (draggedItem.offsetTop >= playerBug.offsetTop && draggedItem.offsetTop <= playerBug.offsetHeight) {
+          console.log('УРА ты попал в сумку');
+        }
       } else {
         draggedItem.style.top = startCoordsReset.x + 'px';
         draggedItem.style.left = startCoordsReset.y + 'px';
       }
+
+      // if (draggedItem.getBoundingClientRect().left >= playerBug.getBoundingClientRect().left && draggedItem.getBoundingClientRect().left <= playerBug.getBoundingClientRect().left + playerBug.offsetWidth) {
+      //   if (draggedItem.offsetTop >= playerBug.offsetTop && draggedItem.offsetTop <= playerBug.offsetHeight) {
+      //     console.log('УРА ты попал в сумку');
+      //   }
+      // } else {
+      //   draggedItem.style.top = startCoordsReset.x + 'px';
+      //   draggedItem.style.left = startCoordsReset.y + 'px';
+      // }
 
       userDialog.removeEventListener('mousemove', onMouseMove);
       userDialog.removeEventListener('mouseup', onMouseUp);
