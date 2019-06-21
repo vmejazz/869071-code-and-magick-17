@@ -245,7 +245,7 @@ var draggedSetupWindow = function () {
 
 
       if (dragged) {
-        var onClickPreventDefault = function (evt) {
+        var onClickPreventDefault = function () {
           evt.preventDefault();
           dialogHandler.removeEventListener('click', onClickPreventDefault);
         };
@@ -267,7 +267,7 @@ draggedSetupWindow();
 var playerBug = userDialog.querySelector('.setup-artifacts');
 
 var draggedWindow = function (draggedItem) {
-  draggedItem.addEventListener('mousedown', function (evt) {
+  var onMouseDown = function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -305,38 +305,52 @@ var draggedWindow = function (draggedItem) {
     var onMouseUp = function (upEvt) {
       upEvt.preventDefault();
 
-      if (draggedItem.offsetLeft >= playerBug.offsetLeft && draggedItem.offsetLeft <= playerBug.offsetLeft + playerBug.offsetWidth) {
-        if (draggedItem.offsetTop >= playerBug.offsetTop && draggedItem.offsetTop <= playerBug.offsetHeight) {
-          console.log('УРА ты попал в сумку');
-        }
-      } else {
-        draggedItem.style.top = startCoordsReset.x + 'px';
-        draggedItem.style.left = startCoordsReset.y + 'px';
-      }
 
-      // if (draggedItem.getBoundingClientRect().left >= playerBug.getBoundingClientRect().left && draggedItem.getBoundingClientRect().left <= playerBug.getBoundingClientRect().left + playerBug.offsetWidth) {
-      //   if (draggedItem.offsetTop >= playerBug.offsetTop && draggedItem.offsetTop <= playerBug.offsetHeight) {
-      //     console.log('УРА ты попал в сумку');
-      //   }
+      // if (draggedItem.getBoundingClientRect().left >= playerBug.getBoundingClientRect().left && draggedItem.getBoundingClientRect().left + draggedItem.offsetWidth <= playerBug.getBoundingClientRect().left + playerBug.offsetWidth && draggedItem.getBoundingClientRect().top >= playerBug.getBoundingClientRect().top && draggedItem.getBoundingClientRect().top + draggedItem.offsetHeight <= playerBug.getBoundingClientRect().top + playerBug.offsetHeight) {
+      //   // console.log('УРА ты попал в сумку');
       // } else {
       //   draggedItem.style.top = startCoordsReset.x + 'px';
       //   draggedItem.style.left = startCoordsReset.y + 'px';
       // }
 
+      var getPositionItemInBug = function () {
+        var positionElemntX = draggedItem.getBoundingClientRect().left;
+        var positionElemntY = draggedItem.getBoundingClientRect().top;
+        var positionBugX = playerBug.getBoundingClientRect().left;
+        var positionBugY = playerBug.getBoundingClientRect().top;
+        if (positionElemntX >= positionBugX && positionElemntX + draggedItem.offsetWidth <= positionBugX + playerBug.offsetWidth) {
+          if (positionElemntY >= positionBugY && positionElemntY + draggedItem.offsetHeight <= positionBugY + playerBug.offsetHeight) {
+            return true;
+          }
+
+          return false;
+        }
+
+        return false;
+      };
+
+      if (getPositionItemInBug()) {
+        // console.log('Попал в сумку, молодец!');
+      } else {
+        draggedItem.style.top = startCoordsReset.x + 'px';
+        draggedItem.style.left = startCoordsReset.y + 'px';
+      }
+
       userDialog.removeEventListener('mousemove', onMouseMove);
       userDialog.removeEventListener('mouseup', onMouseUp);
+      draggedItem.removeEventListener('mousedown', onMouseDown);
     };
 
     userDialog.addEventListener('mousemove', onMouseMove);
     userDialog.addEventListener('mouseup', onMouseUp);
 
-  });
+  };
+
+  draggedItem.addEventListener('mousedown', onMouseDown);
 };
 
 var shopElementClickHandler = function (evt) {
   evt.preventDefault();
-  console.log(evt.target);
-  console.log(evt.target.tagName);
   if (evt.target.tagName === 'IMG') {
     draggedWindow(evt.target);
   }
