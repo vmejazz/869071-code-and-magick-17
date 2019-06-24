@@ -194,11 +194,11 @@ var startCoordsUserDialog = {
   y: userDialogResetY
 };
 
+var onDialog = userDialog.querySelector('.upload');
+
 var draggedSetupWindow = function () {
 
-  var dialogHandler = userDialog.querySelector('.upload');
-
-  dialogHandler.addEventListener('mousedown', function (evt) {
+  onDialog.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -217,7 +217,7 @@ var draggedSetupWindow = function () {
 
     var dragged = false;
 
-    var onMouseMove = function (moveEvt) {
+    var onMouseMoveInSetupDialog = function (moveEvt) {
       moveEvt.preventDefault();
       dragged = true;
 
@@ -236,25 +236,25 @@ var draggedSetupWindow = function () {
 
     };
 
-    var onMouseUp = function (upEvt) {
+    var onMouseUpInSetupDialog = function (upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMoveInSetupDialog);
+      document.removeEventListener('mouseup', onMouseUpInSetupDialog);
 
 
       if (dragged) {
         var onClickPreventDefault = function (eventDrag) {
           eventDrag.preventDefault();
-          dialogHandler.removeEventListener('click', onClickPreventDefault);
+          onDialog.removeEventListener('click', onClickPreventDefault);
         };
-        dialogHandler.addEventListener('click', onClickPreventDefault);
+        onDialog.addEventListener('click', onClickPreventDefault);
       }
 
     };
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMoveInSetupDialog);
+    document.addEventListener('mouseup', onMouseUpInSetupDialog);
   });
 };
 
@@ -281,7 +281,7 @@ var draggedWindow = function (draggedItem) {
       y: resetY
     };
 
-    var onMouseMove = function (moveEvt) {
+    var onMouseMoveInShop = function (moveEvt) {
       moveEvt.preventDefault();
       draggedItem.style.position = 'absolute';
 
@@ -300,50 +300,58 @@ var draggedWindow = function (draggedItem) {
 
     };
 
-    var onMouseUp = function (upEvt) {
+    var onMouseUpInShop = function (upEvt) {
       upEvt.preventDefault();
 
-      var getPositionItemInBug = function () {
+      var checkItemPositionInBugHorizontal = function (eX, eWidth, bX, bWidth) {
+        if (eX >= bX && eX + eWidth <= bX + bWidth) {
+          return true;
+        }
+        return false;
+      };
+
+      var checkItemPositionInBugVertical = function (eY, eHeight, bY, bHeight) {
+        if (eY >= bY && eY + eHeight <= bY + bHeight) {
+          return true;
+        }
+        return false;
+      };
+
+      var checkPositionItemInBug = function () {
         var positionElemntX = draggedItem.getBoundingClientRect().left;
         var positionElemntY = draggedItem.getBoundingClientRect().top;
         var positionBugX = playerBug.getBoundingClientRect().left;
         var positionBugY = playerBug.getBoundingClientRect().top;
-        if (positionElemntX >= positionBugX && positionElemntX + draggedItem.offsetWidth <= positionBugX + playerBug.offsetWidth) {
-          if (positionElemntY >= positionBugY && positionElemntY + draggedItem.offsetHeight <= positionBugY + playerBug.offsetHeight) {
-            return true;
-          }
-
-          return false;
+        if (checkItemPositionInBugHorizontal(positionElemntX, draggedItem.offsetWidth, positionBugX, playerBug.offsetWidth) && checkItemPositionInBugVertical(positionElemntY, draggedItem.offsetHeight, positionBugY, playerBug.offsetHeight)) {
+          return true;
         }
 
         return false;
       };
 
-      if (getPositionItemInBug()) {
-        // console.log('Попал в сумку, молодец!');
-      } else {
+      if (!checkPositionItemInBug()) {
         draggedItem.style.top = startCoordsReset.x + 'px';
         draggedItem.style.left = startCoordsReset.y + 'px';
       }
 
-      userDialog.removeEventListener('mousemove', onMouseMove);
-      userDialog.removeEventListener('mouseup', onMouseUp);
+      userDialog.removeEventListener('mousemove', onMouseMoveInShop);
+      userDialog.removeEventListener('mouseup', onMouseUpInShop);
       draggedItem.removeEventListener('mousedown', onMouseDown);
     };
 
-    userDialog.addEventListener('mousemove', onMouseMove);
-    userDialog.addEventListener('mouseup', onMouseUp);
+    userDialog.addEventListener('mousemove', onMouseMoveInShop);
+    userDialog.addEventListener('mouseup', onMouseUpInShop);
 
   };
 
   draggedItem.addEventListener('mousedown', onMouseDown);
 };
 
-var shopElementClickHandler = function (evt) {
+var onShopElementClick = function (evt) {
   evt.preventDefault();
   if (evt.target.tagName === 'IMG') {
     draggedWindow(evt.target);
   }
 };
 
-userDialog.addEventListener('mousedown', shopElementClickHandler, true);
+userDialog.addEventListener('mousedown', onShopElementClick, true);
