@@ -194,11 +194,11 @@ var startCoordsUserDialog = {
   y: userDialogResetY
 };
 
-var onDialog = userDialog.querySelector('.upload');
+var dialogIcon = userDialog.querySelector('.upload');
 
-var draggedSetupWindow = function () {
+var dragSetupWindow = function () {
 
-  onDialog.addEventListener('mousedown', function (evt) {
+  dialogIcon.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCoords = {
@@ -246,9 +246,9 @@ var draggedSetupWindow = function () {
       if (dragged) {
         var onClickPreventDefault = function (eventDrag) {
           eventDrag.preventDefault();
-          onDialog.removeEventListener('click', onClickPreventDefault);
+          dialogIcon.removeEventListener('click', onClickPreventDefault);
         };
-        onDialog.addEventListener('click', onClickPreventDefault);
+        dialogIcon.addEventListener('click', onClickPreventDefault);
       }
 
     };
@@ -258,7 +258,7 @@ var draggedSetupWindow = function () {
   });
 };
 
-draggedSetupWindow();
+dragSetupWindow();
 
 //  ------------------------------------------------- перетаскиваем вещи из магазина в сумку
 
@@ -317,7 +317,7 @@ var draggedWindow = function (draggedItem) {
         return false;
       };
 
-      var checkPositionItemInBug = function () {
+      var checkPositionItemInBag = function () {
         var positionElemntX = draggedItem.getBoundingClientRect().left;
         var positionElemntY = draggedItem.getBoundingClientRect().top;
         var positionBugX = playerBug.getBoundingClientRect().left;
@@ -329,18 +329,18 @@ var draggedWindow = function (draggedItem) {
         return false;
       };
 
-      if (!checkPositionItemInBug()) {
+      if (!checkPositionItemInBag()) {
         draggedItem.style.top = startCoordsReset.x + 'px';
         draggedItem.style.left = startCoordsReset.y + 'px';
       }
 
-      userDialog.removeEventListener('mousemove', onMouseMoveInShop);
-      userDialog.removeEventListener('mouseup', onMouseUpInShop);
+      document.removeEventListener('mousemove', onMouseMoveInShop);
+      document.removeEventListener('mouseup', onMouseUpInShop);
       draggedItem.removeEventListener('mousedown', onMouseDown);
     };
 
-    userDialog.addEventListener('mousemove', onMouseMoveInShop);
-    userDialog.addEventListener('mouseup', onMouseUpInShop);
+    document.addEventListener('mousemove', onMouseMoveInShop);
+    document.addEventListener('mouseup', onMouseUpInShop);
 
   };
 
@@ -354,4 +354,4 @@ var onShopElementClick = function (evt) {
   }
 };
 
-userDialog.addEventListener('mousedown', onShopElementClick, true);
+document.addEventListener('mousedown', onShopElementClick, true);
