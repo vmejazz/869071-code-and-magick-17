@@ -2,7 +2,6 @@
 'use strict';
 
 var userDialog = document.querySelector('.setup');
-// userDialog.classList.remove('hidden');
 
 var similarListElement = userDialog.querySelector('.setup-similar-list');
 
@@ -123,6 +122,8 @@ var closePopup = function () {
     setup.classList.add('hidden');
     document.removeEventListener('keydown', onPopupEscPress);
   }
+  userDialog.style.top = startCoordsUserDialog.x + 'px';
+  userDialog.style.left = startCoordsUserDialog.y + 'px';
 };
 
 setupOpen.addEventListener('click', function () {
@@ -183,3 +184,174 @@ wizardPlayerCoatColorSetup.addEventListener('click', function () {
 fireballPlayerSetup.addEventListener('click', function () {
   changefireballPlayer();
 });
+
+// module5-task1 ----------------------------------------------
+
+var userDialogResetX;
+var userDialogResetY;
+var startCoordsUserDialog = {
+  x: userDialogResetX,
+  y: userDialogResetY
+};
+
+var dialogIcon = userDialog.querySelector('.upload');
+
+var dragSetupWindow = function () {
+
+  dialogIcon.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    userDialogResetX = userDialog.offsetTop;
+    userDialogResetY = userDialog.offsetLeft;
+
+    startCoordsUserDialog = {
+      x: userDialogResetX,
+      y: userDialogResetY
+    };
+
+
+    var dragged = false;
+
+    var onMouseMoveInSetupDialog = function (moveEvt) {
+      moveEvt.preventDefault();
+      dragged = true;
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      userDialog.style.top = (userDialog.offsetTop - shift.y) + 'px';
+      userDialog.style.left = (userDialog.offsetLeft - shift.x) + 'px';
+
+    };
+
+    var onMouseUpInSetupDialog = function (upEvt) {
+      upEvt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMoveInSetupDialog);
+      document.removeEventListener('mouseup', onMouseUpInSetupDialog);
+
+
+      if (dragged) {
+        var onClickPreventDefault = function (eventDrag) {
+          eventDrag.preventDefault();
+          dialogIcon.removeEventListener('click', onClickPreventDefault);
+        };
+        dialogIcon.addEventListener('click', onClickPreventDefault);
+      }
+
+    };
+
+    document.addEventListener('mousemove', onMouseMoveInSetupDialog);
+    document.addEventListener('mouseup', onMouseUpInSetupDialog);
+  });
+};
+
+dragSetupWindow();
+
+//  ------------------------------------------------- перетаскиваем вещи из магазина в сумку
+
+var playerBug = userDialog.querySelector('.setup-artifacts');
+
+var draggedWindow = function (draggedItem) {
+  var onMouseDown = function (evt) {
+    evt.preventDefault();
+
+    var startCoords = {
+      x: evt.clientX,
+      y: evt.clientY
+    };
+
+    var resetX = draggedItem.offsetTop;
+    var resetY = draggedItem.offsetLeft;
+
+    var startCoordsReset = {
+      x: resetX,
+      y: resetY
+    };
+
+    var onMouseMoveInShop = function (moveEvt) {
+      moveEvt.preventDefault();
+      draggedItem.style.position = 'absolute';
+
+      var shift = {
+        x: startCoords.x - moveEvt.clientX,
+        y: startCoords.y - moveEvt.clientY
+      };
+
+      startCoords = {
+        x: moveEvt.clientX,
+        y: moveEvt.clientY
+      };
+
+      draggedItem.style.top = (draggedItem.offsetTop - shift.y) + 'px';
+      draggedItem.style.left = (draggedItem.offsetLeft - shift.x) + 'px';
+
+    };
+
+    var onMouseUpInShop = function (upEvt) {
+      upEvt.preventDefault();
+
+      var checkItemPositionInBugHorizontal = function (eX, eWidth, bX, bWidth) {
+        if (eX >= bX && eX + eWidth <= bX + bWidth) {
+          return true;
+        }
+        return false;
+      };
+
+      var checkItemPositionInBugVertical = function (eY, eHeight, bY, bHeight) {
+        if (eY >= bY && eY + eHeight <= bY + bHeight) {
+          return true;
+        }
+        return false;
+      };
+
+      var checkPositionItemInBag = function () {
+        var positionElemntX = draggedItem.getBoundingClientRect().left;
+        var positionElemntY = draggedItem.getBoundingClientRect().top;
+        var positionBugX = playerBug.getBoundingClientRect().left;
+        var positionBugY = playerBug.getBoundingClientRect().top;
+        if (checkItemPositionInBugHorizontal(positionElemntX, draggedItem.offsetWidth, positionBugX, playerBug.offsetWidth) && checkItemPositionInBugVertical(positionElemntY, draggedItem.offsetHeight, positionBugY, playerBug.offsetHeight)) {
+          return true;
+        }
+
+        return false;
+      };
+
+      if (!checkPositionItemInBag()) {
+        draggedItem.style.top = startCoordsReset.x + 'px';
+        draggedItem.style.left = startCoordsReset.y + 'px';
+      }
+
+      document.removeEventListener('mousemove', onMouseMoveInShop);
+      document.removeEventListener('mouseup', onMouseUpInShop);
+      draggedItem.removeEventListener('mousedown', onMouseDown);
+    };
+
+    document.addEventListener('mousemove', onMouseMoveInShop);
+    document.addEventListener('mouseup', onMouseUpInShop);
+
+  };
+
+  draggedItem.addEventListener('mousedown', onMouseDown);
+};
+
+var onShopElementClick = function (evt) {
+  evt.preventDefault();
+  if (evt.target.tagName === 'IMG') {
+    draggedWindow(evt.target);
+  }
+};
+
+document.addEventListener('mousedown', onShopElementClick, true);
