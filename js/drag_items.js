@@ -87,8 +87,8 @@
   };
 
   var onShopElementClick = function (evt) {
-    evt.preventDefault();
     if (evt.target.tagName === 'IMG') {
+      evt.preventDefault();
       draggedWindow(evt.target);
     }
   };
