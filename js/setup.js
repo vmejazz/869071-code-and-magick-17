@@ -2,7 +2,7 @@
 'use strict';
 
 (function () {
-  window.userDialog = document.querySelector('.setup');
+  var userDialog = document.querySelector('.setup');
 
   var setup = document.querySelector('.setup');
   var setupOpen = document.querySelector('.setup-open');
@@ -22,8 +22,8 @@
       setup.classList.add('hidden');
       document.removeEventListener('keydown', onPopupEscPress);
     }
-    window.userDialog.style.top = window.startCoordsUserDialog.x + 'px';
-    window.userDialog.style.left = window.startCoordsUserDialog.y + 'px';
+    userDialog.style.top = window.startCoordsUserDialog.x + 'px';
+    userDialog.style.left = window.startCoordsUserDialog.y + 'px';
   };
 
   setupOpen.addEventListener('click', function () {
@@ -41,4 +41,8 @@
   setupClose.addEventListener('keydown', function (evt) {
     window.util.isEnterEvent(evt, closePopup);
   });
+
+  window.setup = {
+    userDialog: userDialog
+  };
 })();

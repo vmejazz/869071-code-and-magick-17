@@ -8,7 +8,7 @@
     y: userDialogResetY
   };
 
-  var dialogIcon = window.userDialog.querySelector('.upload');
+  var dialogIcon = window.setup.userDialog.querySelector('.upload');
 
   var dragSetupWindow = function () {
 
@@ -20,8 +20,8 @@
         y: evt.clientY
       };
 
-      userDialogResetX = window.userDialog.offsetTop;
-      userDialogResetY = window.userDialog.offsetLeft;
+      userDialogResetX = window.setup.userDialog.offsetTop;
+      userDialogResetY = window.setup.userDialog.offsetLeft;
 
       window.startCoordsUserDialog = {
         x: userDialogResetX,
@@ -45,8 +45,8 @@
           y: moveEvt.clientY
         };
 
-        window.userDialog.style.top = (window.userDialog.offsetTop - shift.y) + 'px';
-        window.userDialog.style.left = (window.userDialog.offsetLeft - shift.x) + 'px';
+        window.setup.userDialog.style.top = (window.setup.userDialog.offsetTop - shift.y) + 'px';
+        window.setup.userDialog.style.left = (window.setup.userDialog.offsetLeft - shift.x) + 'px';
 
       };
 

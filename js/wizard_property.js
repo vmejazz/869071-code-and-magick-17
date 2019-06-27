@@ -3,7 +3,7 @@
 (function () {
   // Генерация рандомных волшебников
 
-  var similarListElement = window.userDialog.querySelector('.setup-similar-list');
+  var similarListElement = window.setup.userDialog.querySelector('.setup-similar-list');
 
   var similarWizardTemplate = document.querySelector('#similar-wizard-template')
       .content
@@ -95,7 +95,7 @@
   }
   similarListElement.appendChild(fragment);
 
-  window.userDialog.querySelector('.setup-similar').classList.remove('hidden');
+  window.setup.userDialog.querySelector('.setup-similar').classList.remove('hidden');
 
 
   // Изменение параметров игрока

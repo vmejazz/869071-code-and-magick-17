@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var playerBug = window.userDialog.querySelector('.setup-artifacts');
+  var playerBug = window.setup.userDialog.querySelector('.setup-artifacts');
 
   var draggedWindow = function (draggedItem) {
     var onMouseDown = function (evt) {
@@ -93,5 +93,5 @@
     }
   };
 
-  window.userDialog.addEventListener('mousedown', onShopElementClick, true);
+  window.setup.userDialog.addEventListener('mousedown', onShopElementClick, true);
 })();
